@@ -1,0 +1,27 @@
+﻿{% extends "web/base.html" %}
+{% block content %}
+<div class="section-card">
+  <div class="section-card__header">
+    <div>
+      <h2 class="section-card__title">الدورات المتاحة</h2>
+      <p class="text-muted mb-0">قائمة بالمقررات الحالية وروابطها.</p>
+    </div>
+  </div>
+  <div class="legend-divider"></div>
+  <div class="legend-list-group">
+    {% for course in courses %}
+      <div class="list-group-item">
+        <div class="d-flex justify-content-between align-items-center gap-3">
+          <div>
+            <h3 class="h5 mb-1">{{ course.name }}</h3>
+            <p class="mb-0 text-muted">{{ course.description|default:"لا يوجد وصف." }}</p>
+          </div>
+          <span class="badge badge-soft">{{ course.assignments.count }} واجب</span>
+        </div>
+      </div>
+    {% empty %}
+      {% include "web/partials/_empty.html" with title="لا توجد دورات." message="سيتم عرض الدورات هنا بمجرد إضافتها." icon="bi-grid" %}
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

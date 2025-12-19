@@ -1,0 +1,64 @@
+{% extends "web/base.html" %}
+{% block content %}
+<div class="backbar mb-4">
+  <div class="d-flex align-items-center gap-2">
+    <span class="badge-role"><i class="bi bi-star-fill"></i></span>
+    <div>
+      <h1 class="h4 fw-bold mb-1">لوحة الطالب</h1>
+      <p class="text-muted mb-0">مرحباً! تابع دوراتك وواجباتك وتواصل مع المعلم مباشرة.</p>
+    </div>
+  </div>
+  <div class="nav-quick-actions">
+    <a class="btn btn-outline-gold" href="{% url 'web:assignments_list' %}"><i class="bi bi-journal"></i> الواجبات</a>
+    <a class="btn btn-primary btn-sm" href="{% url 'web:submissions_list' %}"><i class="bi bi-upload"></i> تسليماتي</a>
+  </div>
+</div>
+
+<div class="hero-grid mb-4">
+  <div class="card-legend stat-card">
+    <div class="d-flex justify-content-between align-items-start">
+      <div>
+        <p class="text-muted mb-1">الدورات</p>
+        <p class="stat-value mb-0">{{ courses_count }}</p>
+      </div>
+      <i class="bi bi-collection text-warning fs-3"></i>
+    </div>
+    <div class="legend-divider"></div>
+    <a class="btn btn-ghost w-100" href="{% url 'web:courses_list' %}">عرض الدورات</a>
+  </div>
+  <div class="card-legend stat-card">
+    <div class="d-flex justify-content-between align-items-start">
+      <div>
+        <p class="text-muted mb-1">الواجبات</p>
+        <p class="stat-value mb-0">{{ assignments_count }}</p>
+      </div>
+      <i class="bi bi-stickies text-info fs-3"></i>
+    </div>
+    <div class="legend-divider"></div>
+    <a class="btn btn-ghost w-100" href="{% url 'web:assignments_list' %}">كل الواجبات</a>
+  </div>
+  <div class="card-legend stat-card">
+    <div class="d-flex justify-content-between align-items-start">
+      <div>
+        <p class="text-muted mb-1">تسليماتي</p>
+        <p class="stat-value mb-0 text-success">{{ submissions_count }}</p>
+      </div>
+      <i class="bi bi-send-check text-success fs-3"></i>
+    </div>
+    <div class="legend-divider"></div>
+    <a class="btn btn-ghost w-100" href="{% url 'web:submissions_list' %}">تفاصيل التسليمات</a>
+  </div>
+</div>
+
+<div class="section-card">
+  <div class="section-card__header">
+    <div>
+      <h2 class="section-card__title">اقتراحات للبدء</h2>
+      <p class="text-muted mb-0">ابدأ بمتابعة أحدث الواجبات أو تواصل مع المعلم عند الحاجة.</p>
+    </div>
+    <a class="btn btn-outline-gold btn-sm" href="{% url 'web:chat_list' %}"><i class="bi bi-chat"></i> الدردشة</a>
+  </div>
+  <div class="legend-divider"></div>
+  <p class="mb-0 text-muted">يمكنك فتح أي واجب من القائمة لمراجعة التعليمات ورفع ملفاتك مباشرة.</p>
+</div>
+{% endblock %}

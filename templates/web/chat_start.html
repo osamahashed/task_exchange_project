@@ -1,0 +1,25 @@
+﻿{% extends "web/base.html" %}
+{% block content %}
+<div class="section-card" style="max-width:720px; margin-inline:auto;">
+  <div class="section-card__header">
+    <div>
+      <h2 class="section-card__title"><i class="bi bi-chat-heart me-2"></i> بدء محادثة جديدة</h2>
+      <p class="text-muted mb-0">اختر الطرف الآخر والواجب المرتبط لبدء التواصل.</p>
+    </div>
+    <a class="btn btn-ghost btn-sm" href="{% url 'web:chat_list' %}"><i class="bi bi-arrow-90deg-left"></i> العودة</a>
+  </div>
+  <div class="legend-divider"></div>
+  <form method="post" novalidate class="d-flex flex-column gap-3">
+    {% csrf_token %}
+    {% if form.non_field_errors %}<div class="alert alert-danger">{{ form.non_field_errors }}</div>{% endif %}
+    {% for field in form %}
+      <div>
+        <label class="form-label fw-semibold">{{ field.label }}</label>
+        {{ field }}
+        {% for e in field.errors %}<div class="text-danger small mt-2">{{ e }}</div>{% endfor %}
+      </div>
+    {% endfor %}
+    <button class="btn btn-primary"><i class="bi bi-chat-dots"></i> إنشاء المحادثة</button>
+  </form>
+</div>
+{% endblock %}

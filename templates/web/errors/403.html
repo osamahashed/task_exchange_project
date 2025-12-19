@@ -1,0 +1,11 @@
+﻿{% extends "web/base.html" %}
+{% block content %}
+<div class="text-center py-5">
+  <div class="display-1 text-danger fw-bold">403</div>
+  <h1 class="h4 fw-bold mb-3">عذرًا، لا تملك صلاحية الوصول</h1>
+  <p class="text-muted mb-4">يبدو أنك حاولت الوصول إلى صفحة محمية. إذا كنت تعتقد أن هذا خطأ، يرجى التواصل مع المشرف.</p>
+  <a class="btn btn-primary" href="{% url 'web:home' %}">العودة إلى الصفحة الرئيسية</a>
+</div>
+{% endblock %}
+
+

@@ -1,0 +1,19 @@
+﻿body {
+  font-family: "Tajawal", "Cairo", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+.auth-shell {
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+.text-muted-soft {
+  color: rgba(148, 163, 184, 0.7);
+}
+
+.card-clean {
+  background: rgba(248, 250, 252, 0.94);
+  border-radius: 18px;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.12);
+}

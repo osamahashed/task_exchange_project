@@ -1,0 +1,29 @@
+﻿{% extends "web/base.html" %}
+{% block content %}
+<div class="section-card" style="max-width:820px;">
+  <div class="d-flex flex-column flex-md-row align-items-center gap-4">
+    <div class="display-4 text-warning"><i class="bi bi-person-circle"></i></div>
+    <div class="flex-fill">
+      <h2 class="h3 fw-bold mb-1">{{ request.user.username }}</h2>
+      <div class="d-flex flex-wrap gap-2 align-items-center">
+        {% if request.user.profile.role == 'teacher' %}
+          <span class="role-pill"><i class="bi bi-mortarboard-fill"></i> معلم</span>
+        {% else %}
+          <span class="role-pill"><i class="bi bi-person-badge-fill"></i> طالب</span>
+          {% if request.user.profile.is_verified_student %}
+            <span class="verification-pill verification-pill--ok"><i class="bi bi-shield-check"></i> مفعل</span>
+          {% else %}
+            <span class="verification-pill verification-pill--pending"><i class="bi bi-shield-exclamation"></i> يحتاج تفعيل</span>
+          {% endif %}
+        {% endif %}
+      </div>
+    </div>
+    <div class="text-muted">المعرف: {{ request.user.id }}</div>
+  </div>
+  {% if request.user.profile.role == 'student' and not request.user.profile.is_verified_student %}
+    <div class="alert alert-warning mt-4 mb-0">
+      حسابك يحتاج إلى تفعيل عبر رمز الدعوة قبل رفع التسليمات. <a href="{% url 'web:invite_accept' %}">تفعيل الآن</a>.
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

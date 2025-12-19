@@ -1,0 +1,79 @@
+﻿{% extends "web/base.html" %}
+{% load dict_extras %}
+{% block content %}
+<div class="section-card">
+  <div class="section-card__header">
+    <div>
+      <h2 class="section-card__title">تسليمات الطلاب</h2>
+      <p class="text-muted mb-0">مراجعة جميع التسليمات مع تنبيهات النسخ المكررة.</p>
+    </div>
+    <a class="btn btn-outline-gold btn-sm" href="{% url 'web:assignment_create' %}"><i class="bi bi-stickies"></i> إنشاء واجب جديد</a>
+  </div>
+  <div class="legend-divider"></div>
+  <div class="table-responsive">
+    <table class="table table-legend align-middle mb-0">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">الطالب</th>
+          <th scope="col">الواجب</th>
+          <th scope="col">الملفات</th>
+          <th scope="col">التقييم</th>
+          <th scope="col">ملاحظات</th>
+          <th scope="col" class="text-center">إجراء</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for submission in submissions %}
+          <tr>
+            <th scope="row" class="text-muted">{{ forloop.counter }}</th>
+            <td>{{ submission.user.username }}</td>
+            <td>
+              <a href="{% url 'web:assignment_detail' submission.assignment.id %}" class="link-light text-decoration-none">{{ submission.assignment.title }}</a>
+            </td>
+            <td>
+              <div class="legend-attachments">
+                {% with attachments=submission.attachments.all %}
+                  {% if attachments %}
+                    {% for attachment in attachments %}
+                      {% with dup=dup_map|get_item:attachment.sha256 %}
+                        <a class="btn btn-ghost btn-sm" href="{{ attachment.file.url }}" target="_blank">
+                          <i class="bi bi-paperclip"></i> {{ attachment.file.name }}
+                          {% if dup and dup > 1 %}
+                            <span class="badge-status badge-status--flag ms-2"><i class="bi bi-exclamation-octagon"></i> {{ dup }}</span>
+                          {% endif %}
+                        </a>
+                      {% endwith %}
+                    {% endfor %}
+                  {% elif submission.file %}
+                    <a class="btn btn-ghost btn-sm" href="{{ submission.file.url }}" target="_blank"><i class="bi bi-file-earmark"></i> {{ submission.file.name }}</a>
+                  {% else %}
+                    <span class="text-muted">لا توجد ملفات</span>
+                  {% endif %}
+                {% endwith %}
+              </div>
+            </td>
+            <td>
+              {% if submission.grade is not None %}
+                <span class="badge-status badge-status--graded"><i class="bi bi-check-circle"></i> {{ submission.grade }}</span>
+              {% else %}
+                <span class="badge-status badge-status--pending"><i class="bi bi-hourglass"></i> قيد التقييم</span>
+              {% endif %}
+            </td>
+            <td>{{ submission.feedback|default:"-" }}</td>
+            <td class="text-center">
+              <a class="btn btn-outline-gold btn-sm" href="{% url 'web:grade_submission' submission.pk %}"><i class="bi bi-pencil"></i> تقييم</a>
+            </td>
+          </tr>
+        {% empty %}
+          <tr>
+            <td colspan="7" class="text-center py-4">
+              {% include "web/partials/_empty.html" with title="لا توجد تسليمات بعد." message="سيتم عرض التسليمات فور رفع الطلاب لملفاتهم." icon="bi-inboxes" %}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

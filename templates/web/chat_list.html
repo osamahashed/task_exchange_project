@@ -1,0 +1,35 @@
+﻿{% extends "web/base.html" %}
+{% load dict_extras %}
+{% block content %}
+<div class="section-card">
+  <div class="section-card__header">
+    <div>
+      <h2 class="section-card__title"><i class="bi bi-chat-dots me-2"></i> الدردشة</h2>
+      <p class="text-muted mb-0">تواصل من خلال المحادثات المخصصة بين الطالب والمعلم.</p>
+    </div>
+    <a class="btn btn-outline-gold btn-sm" href="{% url 'web:chat_start' %}"><i class="bi bi-plus"></i> بدء محادثة</a>
+  </div>
+  <div class="legend-divider"></div>
+  <div class="legend-list-group">
+    {% for c in conversations %}
+      <a href="{% url 'web:chat_room' c.id %}" class="list-group-item d-flex justify-content-between align-items-center gap-3">
+        <div>
+          <div class="fw-semibold">
+            {% if request.user.id == c.student_id %}المعلم: {{ c.teacher.username }}{% else %}الطالب: {{ c.student.username }}{% endif %}
+          </div>
+          <div class="small text-muted">{% if c.assignment %}الواجب المرتبط: {{ c.assignment.title }}{% else %}بدون واجب محدد{% endif %}</div>
+        </div>
+        {% with u=unread_map|get_item:c.id|default:0 %}
+          {% if u > 0 %}
+            <span class="badge-status badge-status--flag"><i class="bi bi-bell-fill"></i> {{ u }}</span>
+          {% else %}
+            <i class="bi bi-chevron-left"></i>
+          {% endif %}
+        {% endwith %}
+      </a>
+    {% empty %}
+      {% include "web/partials/_empty.html" with title="لا توجد محادثات بعد." message="ابدأ محادثة جديدة للتواصل." icon="bi-chat-left-text" %}
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

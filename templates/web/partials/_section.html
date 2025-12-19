@@ -1,0 +1,17 @@
+﻿<div class="section-card card-legend mb-4">
+  <div class="section-card__header">
+    <div>
+      <h2 class="section-card__title">{{ title }}</h2>
+      {% if subtitle %}<p class="text-muted mb-0">{{ subtitle }}</p>{% endif %}
+    </div>
+    {% if action_label and action_url %}
+      <a href="{{ action_url }}" class="btn btn-primary btn-sm d-flex align-items-center gap-2">
+        {% if action_icon %}<i class="bi {{ action_icon }}"></i>{% endif %}
+        <span>{{ action_label }}</span>
+      </a>
+    {% endif %}
+  </div>
+  <div class="section-card__body pt-3">
+    {{ body|safe }}
+  </div>
+</div>

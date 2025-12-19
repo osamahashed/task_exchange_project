@@ -1,0 +1,57 @@
+﻿from django.urls import path
+
+from .views import (
+    admin_access_view,
+    admin_panel,
+    admin_settings,
+    assignment_create,
+    assignment_detail,
+    assignments_list,
+    chat_list,
+    chat_mark_read,
+    chat_messages_poll,
+    chat_room,
+    chat_start,
+    chat_unread_count,
+    course_create,
+    courses_list,
+    grade_submission,
+    home,
+    invite_accept,
+    invite_new,
+    student_home,
+    submission_create,
+    submissions_list,
+    teacher_home,
+    teacher_submissions,
+)
+from .views_profile import profile_view
+
+app_name = "web"
+
+urlpatterns = [
+    path("", home, name="home"),
+    path("student/", student_home, name="student_home"),
+    path("courses/", courses_list, name="courses_list"),
+    path("assignments/", assignments_list, name="assignments_list"),
+    path("assignments/<int:pk>/", assignment_detail, name="assignment_detail"),
+    path("submissions/", submissions_list, name="submissions_list"),
+    path("submissions/new/<int:assignment_id>/", submission_create, name="submission_create"),
+    path("teacher/", teacher_home, name="teacher_home"),
+    path("teacher/courses/new/", course_create, name="course_create"),
+    path("teacher/assignments/new/", assignment_create, name="assignment_create"),
+    path("teacher/submissions/", teacher_submissions, name="teacher_submissions"),
+    path("teacher/submissions/<int:pk>/grade/", grade_submission, name="grade_submission"),
+    path("invite/new/", invite_new, name="invite_new"),
+    path("invite/accept/", invite_accept, name="invite_accept"),
+    path("chat/", chat_list, name="chat_list"),
+    path("chat/start/", chat_start, name="chat_start"),
+    path("chat/<int:pk>/", chat_room, name="chat_room"),
+    path("chat/api/unread-count/", chat_unread_count, name="chat_unread_count"),
+    path("chat/api/messages/<int:pk>/", chat_messages_poll, name="chat_messages_poll"),
+    path("chat/api/mark-read/<int:pk>/", chat_mark_read, name="chat_mark_read"),
+    path("profile/", profile_view, name="profile"),
+    path("admin-panel/access/", admin_access_view, name="admin_access"),
+    path("admin-panel/", admin_panel, name="admin_panel"),
+    path("admin-panel/settings/", admin_settings, name="admin_settings"),
+]

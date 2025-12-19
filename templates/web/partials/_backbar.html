@@ -1,0 +1,30 @@
+﻿<div class="backbar mb-4">
+  <div class="d-flex flex-column gap-1">
+    <div class="d-flex align-items-center gap-2">
+      <span class="badge-role"><i class="bi bi-lightning-charge"></i></span>
+      <h1 class="h5 mb-0">{{ title }}</h1>
+    </div>
+    {% if subtitle %}
+      <p class="text-muted mb-0">{{ subtitle }}</p>
+    {% endif %}
+    {% if breadcrumbs %}
+      <nav aria-label="breadcrumb" class="mt-2">
+        <ol class="breadcrumb mb-0">
+          {% for crumb in breadcrumbs %}
+            {% if crumb.url %}
+              <li class="breadcrumb-item"><a href="{{ crumb.url }}">{{ crumb.label }}</a></li>
+            {% else %}
+              <li class="breadcrumb-item active" aria-current="page">{{ crumb.label }}</li>
+            {% endif %}
+          {% endfor %}
+        </ol>
+      </nav>
+    {% endif %}
+  </div>
+  {% if action_label and action_url %}
+    <a href="{{ action_url }}" class="btn btn-outline-gold d-flex align-items-center gap-2">
+      <i class="bi bi-plus-circle"></i>
+      <span>{{ action_label }}</span>
+    </a>
+  {% endif %}
+</div>

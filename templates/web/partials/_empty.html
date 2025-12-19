@@ -1,0 +1,11 @@
+﻿<div class="empty-state card-legend">
+  <div class="empty-icon"><i class="bi {{ icon|default:'bi-stars' }}"></i></div>
+  <h2 class="h5 fw-bold mb-2">{{ title }}</h2>
+  <p class="mb-3">{{ message }}</p>
+  {% if action_url and action_label %}
+    <a href="{{ action_url }}" class="btn btn-outline-gold">
+      <i class="bi bi-magic"></i>
+      <span>{{ action_label }}</span>
+    </a>
+  {% endif %}
+</div>

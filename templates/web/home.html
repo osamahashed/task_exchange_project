@@ -1,0 +1,59 @@
+﻿{% extends "web/base.html" %}
+{% block content %}
+<div class="row g-4 align-items-stretch">
+  <div class="col-lg-7">
+    <div class="card-legend hero-card h-100">
+      <div class="d-flex flex-column gap-3">
+        <div>
+          <h1 class="display-5 fw-bold mb-2">مرحباً بك في منصة المهام التعليمية</h1>
+          <p class="text-muted mb-0">نساعدك على تنظيم الدورات، الواجبات، والتواصل بين الطلاب والمعلمين بسهولة.</p>
+        </div>
+        {% if request.user.is_authenticated %}
+          <div class="d-flex flex-wrap gap-2">
+            <a class="btn btn-primary" href="{% url 'web:assignments_list' %}"><i class="bi bi-journal-text"></i> الواجبات</a>
+            <a class="btn btn-outline-gold" href="{% url 'web:courses_list' %}"><i class="bi bi-collection"></i> الدورات</a>
+            <a class="btn btn-outline-gold" href="{% url 'web:submissions_list' %}"><i class="bi bi-cloud-arrow-up"></i> تسليماتي</a>
+            <a class="btn btn-ghost" href="{% url 'web:chat_list' %}"><i class="bi bi-chat-dots"></i> الدردشة</a>
+          </div>
+        {% else %}
+          <div class="d-flex flex-wrap gap-2">
+            <a class="btn btn-primary" href="{% url 'accounts:login' %}"><i class="bi bi-box-arrow-in-left"></i> تسجيل الدخول</a>
+            <a class="btn btn-outline-gold" href="{% url 'accounts:register' %}"><i class="bi bi-person-plus"></i> انضم كطالب أو معلم</a>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-5">
+    <div class="hero-grid">
+      <div class="card-legend stat-card">
+        <div class="d-flex justify-content-between align-items-start">
+          <div>
+            <h2 class="h4 mb-1">الدورات</h2>
+            <p class="mb-0 text-muted">اكتشف محتوى جديداً يطوّر مهاراتك.</p>
+          </div>
+          <i class="bi bi-layers-fill text-warning fs-3"></i>
+        </div>
+      </div>
+      <div class="card-legend stat-card">
+        <div class="d-flex justify-content-between align-items-start">
+          <div>
+            <h2 class="h4 mb-1">الواجبات</h2>
+            <p class="mb-0 text-muted">تابع واجباتك وسلّمها في الوقت المناسب.</p>
+          </div>
+          <i class="bi bi-clipboard-check text-success fs-3"></i>
+        </div>
+      </div>
+      <div class="card-legend stat-card">
+        <div class="d-flex justify-content-between align-items-start">
+          <div>
+            <h2 class="h4 mb-1">التسليمات</h2>
+            <p class="mb-0 text-muted">إدارة جميع ملفاتك في مكان واحد.</p>
+          </div>
+          <i class="bi bi-upload text-info fs-3"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

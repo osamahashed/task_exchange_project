@@ -1,0 +1,68 @@
+﻿{% extends "web/base.html" %}
+{% block content %}
+<div class="section-card">
+  <div class="section-card__header">
+    <div>
+      <h2 class="section-card__title">تسليماتي</h2>
+      <p class="text-muted mb-0">جميع التسليمات الخاصة بك مع حالة التقييم.</p>
+    </div>
+  </div>
+  <div class="legend-divider"></div>
+  <div class="table-responsive">
+    <table class="table table-legend align-middle mb-0">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">الواجب</th>
+          <th scope="col">المقرر</th>
+          <th scope="col">الملفات</th>
+          <th scope="col">التقييم</th>
+          <th scope="col">ملاحظات المعلم</th>
+          <th scope="col">تاريخ الإرسال</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for submission in submissions %}
+          <tr>
+            <th scope="row" class="text-muted">{{ forloop.counter }}</th>
+            <td>
+              <a href="{% url 'web:assignment_detail' submission.assignment.id %}" class="link-light text-decoration-none">{{ submission.assignment.title }}</a>
+            </td>
+            <td>{{ submission.assignment.course.name }}</td>
+            <td>
+              <div class="legend-attachments">
+                {% with attachments=submission.attachments.all %}
+                  {% if attachments %}
+                    {% for attachment in attachments %}
+                      <a class="btn btn-ghost btn-sm" href="{{ attachment.file.url }}" target="_blank"><i class="bi bi-paperclip"></i> {{ attachment.file.name }}</a>
+                    {% endfor %}
+                  {% elif submission.file %}
+                    <a class="btn btn-ghost btn-sm" href="{{ submission.file.url }}" target="_blank"><i class="bi bi-file-earmark"></i> {{ submission.file.name }}</a>
+                  {% else %}
+                    <span class="text-muted">لا توجد ملفات</span>
+                  {% endif %}
+                {% endwith %}
+              </div>
+            </td>
+            <td>
+              {% if submission.grade is not None %}
+                <span class="badge-status badge-status--graded"><i class="bi bi-check-circle"></i> {{ submission.grade }}</span>
+              {% else %}
+                <span class="badge-status badge-status--pending"><i class="bi bi-hourglass"></i> قيد المراجعة</span>
+              {% endif %}
+            </td>
+            <td>{{ submission.feedback|default:"-" }}</td>
+            <td>{{ submission.created_at|date:"Y-m-d H:i" }}</td>
+          </tr>
+        {% empty %}
+          <tr>
+            <td colspan="7" class="text-center py-4">
+              {% include "web/partials/_empty.html" with title="لم تقم برفع أي تسليم بعد." message="ابدأ من صفحة الواجبات لرفع ملفاتك." icon="bi-inbox" %}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,66 @@
+﻿{% extends "web/admin/admin_base.html" %}
+{% block admin_content %}
+<div class="row g-3 mb-4">
+  <div class="col-md-3">
+    <div class="card shadow-sm h-100 border-start border-4 border-primary">
+      <div class="card-body">
+        <h6 class="text-muted">الدورات</h6>
+        <p class="display-6 fw-bold text-primary">{{ courses_count }}</p>
+        <a class="small" href="{% url 'web:courses_list' %}">عرض التفاصيل</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card shadow-sm h-100 border-start border-4 border-info">
+      <div class="card-body">
+        <h6 class="text-muted">الواجبات</h6>
+        <p class="display-6 fw-bold text-info">{{ assignments_count }}</p>
+        <a class="small" href="{% url 'web:assignments_list' %}">متابعة</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card shadow-sm h-100 border-start border-4 border-success">
+      <div class="card-body">
+        <h6 class="text-muted">التسليمات</h6>
+        <p class="display-6 fw-bold text-success">{{ submissions_count }}</p>
+        <a class="small" href="{% url 'web:teacher_submissions' %}">عرض التسليمات</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card shadow-sm h-100 border-start border-4 border-warning">
+      <div class="card-body">
+        <h6 class="text-muted">بانتظار التقييم</h6>
+        <p class="display-6 fw-bold text-warning">{{ pending_submissions }}</p>
+        <span class="small text-muted">تسليمات لم تُقيّم بعد.</span>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row g-3">
+  <div class="col-lg-8">
+    <div class="card shadow-sm h-100">
+      <div class="card-body">
+        <h5 class="fw-bold mb-3">روابط سريعة</h5>
+        <div class="list-group list-group-flush">
+          <a class="list-group-item list-group-item-action" href="{% url 'web:admin_settings' %}">تحديث رموز الوصول</a>
+          <a class="list-group-item list-group-item-action" href="{% url 'web:teacher_submissions' %}">متابعة التسليمات</a>
+          <a class="list-group-item list-group-item-action" href="{% url 'web:courses_list' %}">إدارة الدورات</a>
+          <a class="list-group-item list-group-item-action" href="{% url 'web:assignments_list' %}">إدارة الواجبات</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-4">
+    <div class="card shadow-sm h-100">
+      <div class="card-body">
+        <h5 class="fw-bold mb-3">إحصائيات المستخدمين</h5>
+        <p class="display-6 fw-bold text-primary">{{ users_count }}</p>
+        <p class="text-muted">إجمالي المستخدمين المسجلين في المنصة.</p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+

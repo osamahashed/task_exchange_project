@@ -1,0 +1,11 @@
+﻿{% extends "web/base.html" %}
+{% block content %}
+<div class="text-center py-5">
+  <div class="display-1 text-danger fw-bold">500</div>
+  <h1 class="h4 fw-bold mb-3">حدث خطأ غير متوقع</h1>
+  <p class="text-muted mb-4">واجهنا مشكلة أثناء معالجة طلبك. تم تسجيل الخطأ وسيعمل الفريق على إصلاحه بأسرع وقت.</p>
+  <a class="btn btn-primary" href="{% url 'web:home' %}">المحاولة مرة أخرى</a>
+</div>
+{% endblock %}
+
+

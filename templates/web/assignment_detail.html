@@ -1,0 +1,35 @@
+﻿{% extends "web/base.html" %}
+{% block content %}
+<div class="section-card mb-4">
+  <div class="section-card__header">
+    <div>
+      <h1 class="section-card__title mb-1">{{ assignment.title }}</h1>
+      <p class="text-muted mb-0">المقرر: {{ assignment.course.name }} · موعد التسليم: {{ assignment.due_date|date:"Y-m-d H:i" }}</p>
+    </div>
+    <a class="btn btn-outline-gold btn-sm" href="{% url 'web:assignments_list' %}"><i class="bi bi-arrow-90deg-left"></i> العودة</a>
+  </div>
+  <div class="legend-divider"></div>
+  <div class="row g-4">
+    <div class="col-lg-8">
+      <div class="card-legend p-4 h-100">
+        <h2 class="h5 mb-3">وصف الواجب</h2>
+        <p class="mb-0" style="white-space: pre-wrap;">{{ assignment.description|default:"لا يوجد وصف مفصل." }}</p>
+      </div>
+    </div>
+    <div class="col-lg-4">
+      <div class="d-flex flex-column gap-3">
+        {% if assignment.attachment %}
+          <a class="btn btn-outline-gold" href="{{ assignment.attachment.url }}" download>
+            <i class="bi bi-download"></i>
+            تحميل المرفق
+          </a>
+        {% endif %}
+        {% if assignment.external_link %}
+          <a class="btn btn-ghost" href="{{ assignment.external_link }}" target="_blank" rel="noopener"><i class="bi bi-link-45deg"></i> رابط خارجي</a>
+        {% endif %}
+        <a class="btn btn-primary" href="{% url 'web:submission_create' assignment.id %}"><i class="bi bi-upload"></i> رفع تسليم</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,55 @@
+﻿{% extends "web/base.html" %}
+{% block content %}
+<div class="section-card">
+  <div class="section-card__header">
+    <div>
+      <h2 class="section-card__title"><i class="bi bi-award me-2"></i> تقييم التسليم</h2>
+      <p class="text-muted mb-0">الطالب: {{ submission.user.username }} · الواجب: {{ submission.assignment.title }}</p>
+    </div>
+    <a class="btn btn-ghost btn-sm" href="{% url 'web:teacher_submissions' %}"><i class="bi bi-arrow-90deg-left"></i> العودة</a>
+  </div>
+  <div class="legend-divider"></div>
+  <div class="row g-4">
+    <div class="col-lg-5">
+      <div class="card-legend p-4 h-100">
+        <p class="mb-2 text-muted">تاريخ الإرسال: {{ submission.created_at|date:"Y-m-d H:i" }}</p>
+        <h3 class="h6 fw-bold mb-3">الملفات المرفقة</h3>
+        <div class="legend-attachments">
+          {% with attachments=submission.attachments.all %}
+            {% if attachments %}
+              {% for attachment in attachments %}
+                <a class="btn btn-ghost btn-sm" href="{{ attachment.file.url }}" target="_blank"><i class="bi bi-paperclip"></i> {{ attachment.file.name }}</a>
+              {% endfor %}
+            {% elif submission.file %}
+              <a class="btn btn-ghost btn-sm" href="{{ submission.file.url }}" target="_blank"><i class="bi bi-file-earmark"></i> {{ submission.file.name }}</a>
+            {% else %}
+              <span class="text-muted">لا توجد ملفات</span>
+            {% endif %}
+          {% endwith %}
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-7">
+      <form method="post" novalidate class="card-legend p-4 d-flex flex-column gap-3">
+        {% csrf_token %}
+        {% if form.non_field_errors %}
+          <div class="alert alert-danger">{{ form.non_field_errors|join:" " }}</div>
+        {% endif %}
+        <div>
+          <label class="form-label fw-semibold" for="id_grade">الدرجة</label>
+          {{ form.grade }}
+          {% if form.grade.errors %}<div class="text-danger small mt-2">{{ form.grade.errors|join:" " }}</div>{% endif %}
+        </div>
+        <div>
+          <label class="form-label fw-semibold" for="id_feedback">ملاحظات</label>
+          {{ form.feedback }}
+          {% if form.feedback.errors %}<div class="text-danger small mt-2">{{ form.feedback.errors|join:" " }}</div>{% endif %}
+        </div>
+        <div class="d-flex gap-2 justify-content-end">
+          <button type="submit" class="btn btn-primary"><i class="bi bi-check2"></i> حفظ التقييم</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

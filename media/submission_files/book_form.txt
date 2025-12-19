@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% block title %}{% if book %}تعديل{% else %}إضافة{% endif %} كتاب{% endblock %}
+{% block content %}
+<div class="form-container">
+    <h2>{% if book %}تعديل بيانات الكتاب{% else %}إضافة كتاب جديد{% endif %}</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="title">عنوان الكتاب</label>
+            <input type="text" name="title" id="title" value="{{ book.title|default:'' }}" required>
+        </div>
+        <div class="form-group">
+            <label for="author">اسم المؤلف</label>
+            <input type="text" name="author" id="author" value="{{ book.author.name|default:'' }}" required>
+        </div>
+        <div class="form-group">
+            <label for="categories">الأقسام (افصل بينها بفاصلة ",")</label>
+            <input type="text" name="categories" id="categories" value="{{ categories_str|default:'' }}" required>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label for="publisher">الناشر</label>
+                <input type="text" name="publisher" id="publisher" value="{{ book.publisher|default:'' }}">
+            </div>
+            <div class="form-group">
+                <label for="isbn">ISBN</label>
+                <input type="text" name="isbn" id="isbn" value="{{ book.isbn|default:'' }}">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label for="price">السعر</label>
+                <input type="number" step="0.01" name="price" id="price" value="{{ book.price|default:'10.00' }}" required>
+            </div>
+            <div class="form-group">
+                <label for="rating">التقييم (1-5)</label>
+                <input type="number" name="rating" id="rating" min="1" max="5" value="{{ book.rating|default:'' }}">
+            </div>
+        </div>
+        <div class="form-row">
+             <div class="form-group">
+                <label for="format">الصيغة</label>
+                <select name="format" id="format">
+                    <option value="Hardcover" {% if book.format == "Hardcover" %}selected{% endif %}>غلاف مقوى</option>
+                    <option value="Paperback" {% if book.format == "Paperback" %}selected{% endif %}>غلاف ورقي</option>
+                    <option value="E-book" {% if book.format == "E-book" %}selected{% endif %}>إلكتروني</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="language">اللغة</label>
+                <select name="language" id="language">
+                    <option value="Arabic" {% if book.language == "Arabic" %}selected{% endif %}>عربي</option>
+                    <option value="English" {% if book.language == "English" %}selected{% endif %}>إنجليزي</option>
+                    <option value="French" {% if book.language == "French" %}selected{% endif %}>فرنسي</option>
+                </select>
+            </div>
+             <div class="form-group">
+                <label for="publication_date">تاريخ النشر</label>
+                <input type="date" name="publication_date" id="publication_date" value="{{ book.publication_date|date:'Y-m-d'|default:'' }}" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="summary">ملخص</label>
+            <textarea name="summary" id="summary" rows="4">{{ book.summary|default:'' }}</textarea>
+        </div>
+        <div class="form-group">
+            <label for="cover_image">صورة الغلاف</label>
+            <input type="file" name="cover_image" id="cover_image" accept="image/*">
+        </div>
+        <button type="submit" class="btn filled-btn">حفظ</button>
+    </form>
+</div>
+{% endblock %}

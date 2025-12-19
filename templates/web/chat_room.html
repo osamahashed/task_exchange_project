@@ -1,0 +1,114 @@
+﻿{% extends "web/base.html" %}
+{% block content %}
+<div class="chat-shell mx-auto" style="max-width:960px;">
+  <div class="section-card__header p-4 pb-0">
+    <div>
+      <h2 class="section-card__title mb-1">
+        {% if request.user.id == conv.student_id %}محادثة مع المعلم: {{ conv.teacher.username }}{% else %}محادثة مع الطالب: {{ conv.student.username }}{% endif %}
+      </h2>
+      <p class="text-muted mb-0">{% if conv.assignment %}الواجب المرتبط: {{ conv.assignment.title }}{% else %}بدون واجب محدد{% endif %}</p>
+    </div>
+    <a class="btn btn-ghost btn-sm" href="{% url 'web:chat_list' %}"><i class="bi bi-arrow-counterclockwise"></i> العودة للقائمة</a>
+  </div>
+  <div id="chatBox" class="chat-box" data-last-id="{{ last_id }}">
+    {% for m in chat_messages %}
+      <div class="chat-bubble{% if m.sender_id == request.user.id %} chat-bubble--mine{% endif %}" data-mid="{{ m.id }}">
+        <div class="fw-semibold mb-1">{{ m.sender.username }}</div>
+        <div class="chat-text" style="white-space: pre-wrap;">{{ m.text }}</div>
+        <div class="chat-meta">
+          <span>{{ m.created_at|date:"Y-m-d H:i" }}</span>
+        </div>
+      </div>
+    {% empty %}
+      <div class="text-muted">لا توجد رسائل بعد.</div>
+    {% endfor %}
+  </div>
+  <form method="post" class="chat-form" novalidate>
+    {% csrf_token %}
+    <div class="mb-3">
+      {{ form.text }}
+      {% for e in form.text.errors %}<div class="text-danger small mt-2">{{ e }}</div>{% endfor %}
+    </div>
+    <div class="d-flex gap-2">
+      <button class="btn btn-primary"><i class="bi bi-send"></i> إرسال</button>
+      <a class="btn btn-ghost" href="{% url 'web:chat_list' %}">إغلاق</a>
+    </div>
+  </form>
+</div>
+
+<script>
+(function(){
+  const box = document.getElementById('chatBox');
+  const convId = {{ conv.id }};
+  const csrfInput = document.querySelector("input[name='csrfmiddlewaretoken']");
+  const csrfToken = csrfInput ? csrfInput.value : "";
+  const pollMs = 5000;
+  function scrollToBottom(){
+    box.scrollTop = box.scrollHeight;
+  }
+  scrollToBottom();
+
+  async function markRead(){
+    if (!csrfToken) { return; }
+    try {
+      await fetch("{% url 'web:chat_mark_read' 0 %}".replace('0', convId), {
+        method: "POST",
+        headers: {"X-CSRFToken": csrfToken},
+        credentials: "same-origin"
+      });
+    } catch (err) {}
+  }
+
+  function createBubble(msg){
+    const bubble = document.createElement('div');
+    bubble.className = 'chat-bubble' + (msg.mine ? ' chat-bubble--mine' : '');
+    bubble.setAttribute('data-mid', msg.id);
+
+    const nameEl = document.createElement('div');
+    nameEl.className = 'fw-semibold mb-1';
+    nameEl.textContent = msg.sender;
+    bubble.appendChild(nameEl);
+
+    const textEl = document.createElement('div');
+    textEl.className = 'chat-text';
+    textEl.style.whiteSpace = 'pre-wrap';
+    textEl.textContent = msg.text;
+    bubble.appendChild(textEl);
+
+    const metaEl = document.createElement('div');
+    metaEl.className = 'chat-meta';
+    const timeSpan = document.createElement('span');
+    timeSpan.textContent = msg.created;
+    metaEl.appendChild(timeSpan);
+    bubble.appendChild(metaEl);
+
+    return bubble;
+  }
+
+  async function poll(){
+    try {
+      const lastId = box.getAttribute('data-last-id') || '0';
+      const response = await fetch("{% url 'web:chat_messages_poll' 0 %}".replace('0', convId) + "?after=" + encodeURIComponent(lastId), {
+        credentials: "same-origin"
+      });
+      if (!response.ok) return;
+      const data = await response.json();
+      if (data.messages && data.messages.length){
+        for (const msg of data.messages){
+          const bubble = createBubble(msg);
+          box.appendChild(bubble);
+          box.setAttribute('data-last-id', String(msg.id));
+        }
+        scrollToBottom();
+        await markRead();
+      }
+    } catch (err) {
+    } finally {
+      setTimeout(poll, pollMs);
+    }
+  }
+
+  setTimeout(poll, pollMs);
+})();
+</script>
+{% endblock %}

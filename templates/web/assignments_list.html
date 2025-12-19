@@ -1,0 +1,49 @@
+﻿{% extends "web/base.html" %}
+{% block content %}
+<div class="section-card">
+  <div class="section-card__header">
+    <div>
+      <h2 class="section-card__title">الواجبات</h2>
+      <p class="text-muted mb-0">قائمة بجميع الواجبات المتاحة حالياً.</p>
+    </div>
+    {% if is_teacher %}
+      <a class="btn btn-outline-gold btn-sm" href="{% url 'web:assignment_create' %}"><i class="bi bi-stickies"></i> إنشاء واجب</a>
+    {% endif %}
+  </div>
+  <div class="legend-divider"></div>
+  <div class="table-responsive">
+    <table class="table table-legend align-middle mb-0">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">العنوان</th>
+          <th scope="col">المقرر</th>
+          <th scope="col">موعد التسليم</th>
+          <th scope="col" class="text-center">إجراء</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for assignment in assignments %}
+          <tr>
+            <th scope="row" class="text-muted">{{ forloop.counter }}</th>
+            <td class="fw-semibold">
+              <a href="{% url 'web:assignment_detail' assignment.id %}" class="link-light text-decoration-none">{{ assignment.title }}</a>
+            </td>
+            <td>{{ assignment.course.name }}</td>
+            <td>{{ assignment.due_date|date:"Y-m-d H:i" }}</td>
+            <td class="text-center">
+              <a class="btn btn-outline-gold btn-sm" href="{% url 'web:submission_create' assignment.id %}">رفع تسليم</a>
+            </td>
+          </tr>
+        {% empty %}
+          <tr>
+            <td colspan="5" class="text-center py-4">
+              {% include "web/partials/_empty.html" with title="لا توجد واجبات." message="سيتم عرض الواجبات هنا فور إضافتها." icon="bi-stars" %}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

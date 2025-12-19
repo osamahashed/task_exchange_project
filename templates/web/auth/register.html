@@ -1,0 +1,86 @@
+﻿{% extends "web/base.html" %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-8 col-lg-6">
+    <div class="card shadow-sm">
+      <div class="card-body p-4">
+        <h1 class="h4 text-center mb-4">إنشاء حساب جديد</h1>
+        {% if form.non_field_errors %}
+          <div class="alert alert-danger">{{ form.non_field_errors|join:" " }}</div>
+        {% endif %}
+        <form method="post" novalidate>
+          {% csrf_token %}
+          <div class="row g-3">
+            <div class="col-12">
+              <label class="form-label" for="id_username">اسم المستخدم</label>
+              <input type="text" name="username" class="form-control{% if form.username.errors %} is-invalid{% endif %}" id="id_username" value="{{ form.username.value|default_if_none:'' }}">
+              {% if form.username.errors %}
+                <div class="invalid-feedback">{{ form.username.errors|join:" " }}</div>
+              {% endif %}
+            </div>
+            <div class="col-12">
+              <label class="form-label" for="id_email">البريد الإلكتروني (اختياري)</label>
+              <input type="email" name="email" class="form-control{% if form.email.errors %} is-invalid{% endif %}" id="id_email" value="{{ form.email.value|default_if_none:'' }}">
+              {% if form.email.errors %}
+                <div class="invalid-feedback">{{ form.email.errors|join:" " }}</div>
+              {% endif %}
+            </div>
+            <div class="col-md-6">
+              <label class="form-label" for="id_password1">كلمة المرور</label>
+              <input type="password" name="password1" class="form-control{% if form.password1.errors %} is-invalid{% endif %}" id="id_password1">
+              {% if form.password1.errors %}
+                <div class="invalid-feedback">{{ form.password1.errors|join:" " }}</div>
+              {% endif %}
+            </div>
+            <div class="col-md-6">
+              <label class="form-label" for="id_password2">تأكيد كلمة المرور</label>
+              <input type="password" name="password2" class="form-control{% if form.password2.errors %} is-invalid{% endif %}" id="id_password2">
+              {% if form.password2.errors %}
+                <div class="invalid-feedback">{{ form.password2.errors|join:" " }}</div>
+              {% endif %}
+            </div>
+            <div class="col-md-6">
+              <label class="form-label" for="id_role">الدور</label>
+              <select name="role" class="form-select{% if form.role.errors %} is-invalid{% endif %}" id="id_role">
+                {% for value, label in form.fields.role.choices %}
+                  <option value="{{ value }}"{% if form.role.value == value %} selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+              </select>
+              {% if form.role.errors %}
+                <div class="invalid-feedback">{{ form.role.errors|join:" " }}</div>
+              {% endif %}
+            </div>
+            <div class="col-md-6" id="teacherCodeWrapper">
+              <label class="form-label" for="id_teacher_code">رمز المدرّس</label>
+              <input type="text" name="teacher_code" class="form-control{% if form.teacher_code.errors %} is-invalid{% endif %}" id="id_teacher_code" value="{{ form.teacher_code.value|default_if_none:'' }}" placeholder="TEACH-2025">
+              <div class="form-text">مطلوب فقط عند التسجيل كمدرّس.</div>
+              {% if form.teacher_code.errors %}
+                <div class="invalid-feedback">{{ form.teacher_code.errors|join:" " }}</div>
+              {% endif %}
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary w-100 mt-4">إنشاء الحساب</button>
+        </form>
+        <p class="text-center text-muted mt-3">لديك حساب بالفعل؟ <a href="{% url 'accounts:login' %}">سجّل الدخول</a>.</p>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  (function() {
+    const roleSelect = document.getElementById('id_role');
+    const teacherWrapper = document.getElementById('teacherCodeWrapper');
+    const toggleTeacherField = () => {
+      if (roleSelect.value === 'teacher') {
+        teacherWrapper.style.display = '';
+      } else {
+        teacherWrapper.style.display = 'none';
+      }
+    };
+    roleSelect.addEventListener('change', toggleTeacherField);
+    toggleTeacherField();
+  })();
+</script>
+{% endblock %}
+
+

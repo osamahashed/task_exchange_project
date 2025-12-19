@@ -1,0 +1,15 @@
+﻿{% extends "web/base.html" %}
+{% block content %}
+<div class="admin-shell">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h1 class="h3 fw-bold text-primary">لوحة المشرف</h1>
+      <p class="text-muted mb-0">من هنا يمكنك إدارة إعدادات المنصة ومتابعة النشاط.</p>
+    </div>
+    <a class="btn btn-outline-light bg-primary text-white" href="{% url 'web:home' %}">العودة إلى الواجهة</a>
+  </div>
+  {% block admin_content %}{% endblock %}
+</div>
+{% endblock %}
+
+
