@@ -1,2 +1,3 @@
 ﻿Django==5.2.6
 django-jazzmin>=3,<4
+gunicorn
